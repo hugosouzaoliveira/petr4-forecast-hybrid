@@ -1,0 +1,25 @@
+# Dados (nunca versionar)
+data/raw/
+data/processed/
+
+# Ambiente virtual
+venv/
+env/
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDEs
+.idea/
+.vscode/
+
+# Streamlit
+.streamlit/
+
+# Arquivos grandes
+*.csv
+*.parquet
+*.pkl
