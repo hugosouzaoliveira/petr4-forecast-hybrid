@@ -43,7 +43,7 @@ def build_main_dataset(
                 if nome.lower() == 'selic':
                     series_aligned = series.reindex(df.index, method='ffill')
                 else:
-                    series_monthly = series.resample('M').last()
+                    series_monthly = series.resample('ME').last()
                     series_aligned = series_monthly.reindex(df.index, method='ffill')
                 df = df.join(series_aligned, how='left')
             except Exception as e:

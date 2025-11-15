@@ -2,11 +2,11 @@ from src.features.engineering import (
     create_lags, create_logreturns, create_temp_features,
     create_volume_features, create_dynamic_corr,
     create_vol_features, create_market_regimes,
-    create_moving_averages
+    create_moving_averages, create_diffs
 )
 import pandas as pd
 import numpy as np
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 def build_all_features(
         df: pd.DataFrame,
@@ -14,6 +14,7 @@ def build_all_features(
         exog_price_cols: Optional[List[str]] = None,
         volume_col: Optional[str] = None,
         vix_col: str = '^VIX',
+        econ_ind: Dict[str, int] = None,
         windows: List[int] = None,
         lags: List[int] = None
 )-> pd.DataFrame:
@@ -77,7 +78,17 @@ def build_all_features(
     if vix_col in df.columns:
         df = create_market_regimes(df, vix_col)
     
+    # 10 Diffs
+    if econ_ind:
+        df = create_diffs(df, econ_ind, lags)
+    
+    # 11 Events
+    if 'selic' in econ_ind:
+        df['selic_event'] = (df['diff_1_selic'] != 0).astype(int)
+        df.drop(columns = 'diff_1_selic',inplace=True)
+        df = create_lags(df, 'selic_event', lags)
 
     df = df.dropna()
     df = df.reset_index()
+
     return df.reset_index(drop=True)

@@ -366,6 +366,10 @@ def create_diffs(df, variables, lags):
         variables = [variables]
 
     for var in variables:
-        df_copy[f'diff_{var}'] = df_copy[var].diff(1)
+        df_copy[f'diff_{'1'}_{var}'] = df_copy[var].diff(1)
+        df_copy = create_lags(df_copy, f'diff_{'1'}_{var}', lags)
+        if var != 'selic':
+            df_copy.drop(columns=f'diff_{'1'}_{var}',inplace=True)
+
     
     return df_copy
