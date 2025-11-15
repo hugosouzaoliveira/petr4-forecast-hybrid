@@ -353,3 +353,19 @@ def create_moving_averages(df,tickers,windows):
         
     
     return df_copy
+
+def create_diffs(df, variables, lags):
+    df_copy = df.copy()
+
+    if isinstance(variables, list):
+        if len(variables)==0:
+            raise ValueError('Lista de variáveis vazia.')
+    elif isinstance(variables, str):
+        if len(variables)==0:
+            raise ValueError('Variável não deve ser string vazia')
+        variables = [variables]
+
+    for var in variables:
+        df_copy[f'diff_{var}'] = df_copy[var].diff(1)
+    
+    return df_copy
